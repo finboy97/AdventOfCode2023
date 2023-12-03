@@ -46,12 +46,12 @@ def part_02(list_of_str):
     for i, line in enumerate(list_of_str):
         length = len(line)
         matches=re.finditer(asterisk, line)
-       # print(i)
         for run,match in enumerate(matches):
             match_span = match.span()
             start = 0 if match_span[0]< 2 else match_span[0]-1
-            end = length-1 if (match_span[1] == length-1) else match_span[1]+1
+            end = length-1 if (match_span[1] == length) else match_span[1]
             numbers_to_add = []
+            
             #Check current line
             numbers_on_line=re.finditer(num_regex, line)
             if numbers_on_line != None:
@@ -61,7 +61,6 @@ def part_02(list_of_str):
                     if (start in number_range) or (end in number_range):
                         num_adjacent=True
                     if num_adjacent:
-                        #print(f"Adjacent_number {number.group()}")
                         numbers_to_add.append(number.group())
                         
             #check previous line
@@ -70,32 +69,27 @@ def part_02(list_of_str):
                 for number in numbers_above:
                     number_range = range(number.span()[0], number.span()[1])
                     num_adjacent=False
-                    for value in range(start, end):
+                    for value in range(start, end+1):
                         if value in number_range:
                             num_adjacent=True
                     if num_adjacent:
-                       # print(f"number above: {number.group()}")
                         numbers_to_add.append(number.group())
                     
             #check next line
             if i < height-1:
                 numbers_below = re.finditer(num_regex, list_of_str[i+1])
                 for number in numbers_below:
-                    #print(number.group())
                     number_range = range(number.span()[0], number.span()[1])
-                    #print(number_range)
                     num_adjacent=False
-                    #print(range(start,end))
-                    for value in range(start, end):
-                        #print(value in range(start,end))
+                    print(f"{start}, {end}, {number_range}")
+                    for value in range(start, end+1):
                         if value in number_range:
                             num_adjacent=True
                     if num_adjacent:
-                        #print(f"Number below: {number.group()}")
                         numbers_to_add.append(number.group())
 
+            print(numbers_to_add)
             if len(numbers_to_add)==2:
-                #print(numbers_to_add)
                 total_gear_ratio+=(int(numbers_to_add[0])*int(numbers_to_add[1]))
                 
     return total_gear_ratio
