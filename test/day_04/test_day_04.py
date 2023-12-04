@@ -9,11 +9,11 @@ Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
 Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11"""
 
 
-sample = """Card   1:  5 27 94 20 50  7 98 41 67 34 | 34  9 20 90  7 77 44 71 27 12 98  1 79 96 24 51 25 84 67 41  5 13 78 31 26
-Card   2: 52 14 37 45 82 39 73 67 72 90 | 72 78 37 25 39 68 23 45 73 90 86  2 85 57 80 62 22 26 92 67 82 95 66 14 52
-Card   3: 33 86 80 53 45 32 25 29 84 89 | 89 53 74 49 73 30 25 82 84 44 59 86 32 54 96 41 26 80 68 29 45 33 23 99 17"""
+
 def test_part_01():
     input_list = test_input.split("\n")
-    input_sample = sample.split("\n")
-    #assert part_01(input_sample)==0
     assert part_01(input_list) == 13
+    
+def test_part_02():
+    input_list = test_input.split("\n")
+    assert part_02(input_list)==30
