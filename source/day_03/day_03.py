@@ -1,4 +1,5 @@
 import re
+import time
 
 num_regex = re.compile(r"(\d+)")
 non_numeric_or_fullstop_regex = re.compile(r"[^\d\.]")
@@ -81,14 +82,12 @@ def part_02(list_of_str):
                 for number in numbers_below:
                     number_range = range(number.span()[0], number.span()[1])
                     num_adjacent=False
-                    print(f"{start}, {end}, {number_range}")
                     for value in range(start, end+1):
                         if value in number_range:
                             num_adjacent=True
                     if num_adjacent:
                         numbers_to_add.append(number.group())
 
-            print(numbers_to_add)
             if len(numbers_to_add)==2:
                 total_gear_ratio+=(int(numbers_to_add[0])*int(numbers_to_add[1]))
                 
@@ -100,3 +99,4 @@ with open("source/day_03/input") as input_file:
     input_list = input_file.read().split("\n")
     print(part_01(input_list))
     print(part_02(input_list))
+    end_time = time.time()
