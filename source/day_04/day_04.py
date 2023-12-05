@@ -61,7 +61,7 @@ def process_card(scratchcard):
     for value in scratchcard_nums:
         if value in winning_nums:
             total_winners+=1
-    print(f"Card: {card_id} has {total_winners} winners and {card_tracker[card_id]} appearances")
+    #print(f"Card: {card_id} has {total_winners} winners and {card_tracker[card_id]} appearances")
 
     for winning_ticket in range(int(card_id)+1, int(card_id)+1+total_winners): #Add another set of winners
         card_tracker[f"{winning_ticket}"] += 1*card_tracker[card_id]
