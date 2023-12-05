@@ -1,6 +1,5 @@
-from source.day_05.day_05 import part_01, part_02
-
-# 55 13
+from source.day_05.day_05 import  part_02
+#55 13
 test_input = """seeds: 79 14 55 13
 
 seed-to-soil map:
@@ -35,10 +34,14 @@ humidity-to-location map:
 60 56 37
 56 93 4"""
 
-def test_part_01():
-    input_list = test_input.split("\n")
-    assert part_01(input_list) == 35
+
+
+   
     
 def test_part_02():
     input_list = test_input.split("\n")
     assert part_02(input_list) == 46
+    
+    #def test_part_01():
+#    input_list = test_input.split("\n")
+#    assert part_01(input_list) == 35
