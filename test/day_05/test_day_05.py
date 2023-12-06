@@ -1,5 +1,5 @@
 from source.day_05.day_05 import  part_02
-#55 13
+# 
 test_input = """seeds: 79 14 55 13
 
 seed-to-soil map:

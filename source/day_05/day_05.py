@@ -20,7 +20,7 @@ def find_nearest_location(input_lst, seeds):
         elif line[0].isdigit() and not blank_line: # 
             ranges = line.split(" ")
             source_start = int(ranges[1])
-            source_end = int(ranges[2]) + int(ranges[1])
+            source_end = int(ranges[2]) + int(ranges[1]) -1
             
             counter = 0
             while counter < len(seeds):
@@ -149,7 +149,7 @@ def part_02(input_list):
         if i==0 or i%2==0:
             start = int(pair)
         else:
-            end = start + int(pair)
+            end = start + int(pair)-1
             input_ranges.append([start, end])
 
     return find_nearest_location(input_list, input_ranges)
@@ -159,7 +159,7 @@ with open("source/day_05/input") as input_file:
     input_list = input_file.read().split("\n")
     result = part_02(input_list)
     print(result)
-    
-# 1,141,059,215,  1,387,526,140 range 1,217,101,081, 1,239,051,701
-# [1141059215, 1387526140], start: 1217101081, breakpoint: 1239051701
-114, 138, 121, 123
+
+# Answer was 125742456
+# Spent ages with answer 125742457, until I realised I was not subtracting 1 from the range of seeds 
+# (see line 152 for what it should be. Previously it didn't have the minus 1)
