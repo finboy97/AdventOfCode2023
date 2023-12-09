@@ -40,6 +40,10 @@ z_steps = []
 for num in range(0,len(simultaneous_nodes)):
     z_steps.append([])
 
+# Didn't like this one. I was focused on loop from start to start again. Watched a video by Hyper-neutrino on
+# YouTube to realise how this should be done - looping from first z to first z (D'oh!).
+# I tried bruteforce but Python is not made for trillions of iterations.
+
 for i, value in enumerate(simultaneous_nodes):
     current_value = value
     circle_completed = False
