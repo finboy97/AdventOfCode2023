@@ -6,7 +6,7 @@ KK677 28
 KTJJT 220
 QQQJA 483""".splitlines()
 
-test_input = open("/Users/finbar/PycharmProjects/AdventOfCode2023/source/day_07/input").read().splitlines()
+#test_input = open("/source/day_07/input").read().splitlines()
 test_input = [element.split() for element in test_input]
 
 cards = "AKQT98765432J"
@@ -96,9 +96,13 @@ class OrderedHands():
 
 for element in test_input:
     c = Counter(element[0])
-    counts = c.most_common(3)
+    counts = c.most_common(5)
     print(counts)
-    if len(counts) == 1:
+    if len(counts) == 5:
+        hands_list["pair"].append(element) if ('J', 1) in counts else hands_list["high_card"].append(element)
+    elif len(counts) == 4:
+        hands_list["three"].append(element) if (('J', 1) in counts) or (('J', 2) in counts) else hands_list["pair"].append(element)
+    elif len(counts) == 1:
         hands_list["five"].append(element)
     elif len(counts) == 2:
         if counts[1][0] == "J" or counts[0][0] == "J":
@@ -108,15 +112,15 @@ for element in test_input:
         else:
             hands_list["full_house"].append(element)
     else:
-        if ('J', 2) in counts or ('J', 3) in counts:
-            hands_list["four"].append(element)
+        if counts[0][1] == 3:
+            hands_list["four"].append(element) if (('J', 1) in counts) or (('J', 3) in counts) else hands_list["three"].append(element)
         else:
-            if counts[0][1] == 3:
-                hands_list["three"].append(element)
-            elif counts[0][1] == 2:
-                hands_list["two_pair"].append(element) if counts[1][1] == 2 else hands_list["pair"].append(element)
+            if ('J', 2) in counts:
+                hands_list["four"].append(element)
+            elif ('J', 1) in counts:
+                hands_list["full_house"].append(element)
             else:
-                hands_list["high_card"].append(element)
+                hands_list["two_pair"].append(element)
 
 ordered_hands = defaultdict()
 for key in hands_list.keys():
@@ -139,3 +143,4 @@ print(total_winnings)
 
 # Part 2
 # 253363044 too high
+# 253253225 correct
