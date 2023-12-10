@@ -1,6 +1,15 @@
 from pathlib import Path
 
-input = open("/Users/finbar/PycharmProjects/AdventOfCode2023/source/day_10/input").read()
+input = """..........
+.S------7.
+.|F----7|.
+.||....||.
+.||....||.
+.|L-7F-J|.
+.|II||II|.
+.L--JL--J.
+.........."""
+input = open("source/day_10/input").read()
 input = input.splitlines()
 two_d_map = []
 start_position = 0
@@ -15,8 +24,7 @@ for i, value in enumerate(input):
 height = len(two_d_map)
 length = len(two_d_map[0])
 
-for row in two_d_map:
-    print(row)
+
 visited_locations = set()
 start_loop = []
 
@@ -94,3 +102,10 @@ while next_location is not None:
 
 
 print(int(len(start_loop) / 2))
+
+print(start_loop)
+for row in two_d_map:
+    current_str = ""
+    for element in row:
+        current_str = current_str + element[2] if element in start_loop else current_str + "."
+    print(current_str)
