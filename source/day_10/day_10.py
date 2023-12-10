@@ -1,17 +1,5 @@
 from pathlib import Path
 
-input = """7-F7-
-.FJ|7
-SJLL7
-|F--J
-LJ.LJ"""
-
-"""
-[(0, 0, '7'), (0, 1, '-'), (0, 2, 'F'), (0, 3, '7'), (0, 4, '-')]
-[(1, 0, '.'), (1, 1, 'F'), (1, 2, 'J'), (1, 3, '|'), (1, 4, '7')]
-[(2, 0, 'S'), (2, 1, 'J'), (2, 2, 'L'), (2, 3, 'L'), (2, 4, '7')]
-[(3, 0, '|'), (3, 1, 'F'), (3, 2, '-'), (3, 3, '-'), (3, 4, 'J')]
-[(4, 0, 'L'), (4, 1, 'J'), (4, 2, '.'), (4, 3, 'L'), (4, 4, 'J')]"""
 input = open("/Users/finbar/PycharmProjects/AdventOfCode2023/source/day_10/input").read()
 input = input.splitlines()
 two_d_map = []
@@ -31,16 +19,6 @@ for row in two_d_map:
     print(row)
 visited_locations = set()
 start_loop = []
-"""
-| is a vertical pipe connecting north and south.
-- is a horizontal pipe connecting east and west.
-L is a 90-degree bend connecting north and east.
-J is a 90-degree bend connecting north and west.
-7 is a 90-degree bend connecting south and west.
-F is a 90-degree bend connecting south and east.
-. is ground; there is no pipe in this tile.
-S is the starting position of the animal; 
-there is a pipe on this tile, but your sketch doesn't show what shape the pipe has."""
 
 
 def get_location_from_start(start):
