@@ -9,26 +9,33 @@ input = """..........
 .L--JL--J.
 .........."""
 
-#input = open("/Users/finbar/PycharmProjects/AdventOfCode2023/source/day_10/input").read()
+
+input = open("/Users/finbar/PycharmProjects/AdventOfCode2023/source/day_10/input").read()
 input = input.splitlines()
 two_d_map = []
 start_position = 0
-dots = []
+dots = set()
 for i, value in enumerate(input):
     new_row = []
     for j, alphanum in enumerate(value):
+
         new_row.append((i, j, alphanum))
         if alphanum == "S":
             start_position = (i, j, alphanum)
         if alphanum == ".":
-            dots.append((i, j, alphanum))
+            dots.add((i, j, alphanum))
     two_d_map.append(new_row)
 
 height = len(two_d_map)
 length = len(two_d_map[0])
 
-for row in two_d_map:
-    print(row)
+edge_dots = set()
+for dot in dots:
+    if dot[0] == 0 or dot[0] == height -1:
+        edge_dots.add(dot)
+    elif dot[1] == 0 or dot[1] == length -1:
+        edge_dots.add(dot)
+
 visited_locations = set()
 start_loop = []
 
@@ -107,74 +114,105 @@ while next_location is not None:
 
 print(int(len(start_loop) / 2))
 
-# No idea. Hint said to count how many times it crosses over the loop.
+#Idea - pick dots on the edge. Traverse every neighbour until exhausted. Subtract from total dots at the end.
 
+#Cant do part 2. Not even close. Need to come back to do it. Answer should be 601
+#===========================================================
 for row in two_d_map:
     current_str = ""
     for element in row:
-        current_str = current_str + element[2] if element in start_loop else current_str + "."
-    print(current_str)
-
-map_of_just_loop = []
-for row in two_d_map:
-    updated_row = []
-    for position in row:
-        if position in start_loop:
-            updated_row.append(position)
+        if element in start_loop:
+            current_str = current_str + element[2]
+        elif element in edge_dots:
+            current_str = current_str + "o"
         else:
-            new_pos = (position[0], position[1], ".")
-            updated_row.append(new_pos)
-    map_of_just_loop.append(updated_row)
+            current_str = current_str + "."
 
 
 
+# Structure to track visited dots
+visited_dots = set()
+positions_to_visit = edge_dots
 
-def is_position_in_loop(position):
+def get_neighbours(position):
     row, col = position[0], position[1]
-    x = col -1
-    crosses = 0
-    while x >= 0:
-        pos_to_check = map_of_just_loop[row][x]
-        if pos_to_check in start_loop:
-            left_blocks = "|"
-            up_path = "LJ"
-            down_path = "F7"
-            if pos_to_check[2] in left_blocks:
-                crosses += 1
-            elif pos_to_check[2] in left_blocks:
-                if last_cross
+
+    if col > 0:
+        left = two_d_map[row][col -1]
+        if left not in visited_dots and left[2] == "." and left not in positions_to_visit:
+            positions_to_visit.add(left)
+    if col < length -1:
+        right = two_d_map[row][col + 1]
+        if right not in visited_dots and right[2] == "." and right not in positions_to_visit:
+            positions_to_visit.add(right)
+    if row > 0:
+        up = two_d_map[row - 1][col]
+        if up not in visited_dots and up[2] == "." and up not in positions_to_visit:
+            positions_to_visit.add(up)
+    if row < height -1:
+        down = two_d_map[row + 1][col]
+        if down not in visited_dots and down[2] == "." and down not in positions_to_visit:
+            positions_to_visit.add(down)
+
+
+#while len(positions_to_visit) > 0:
+#    current_position = positions_to_visit.pop()
+#    get_neighbours(current_position)
+#    visited_dots.add(current_position)
+
+dots_not_edges = dots - edge_dots
+print(len(dots))
+print(len(visited_dots))
+
+str_map = []
+for row in two_d_map:
+    line_str = ""
+    for value in row:
+        line_str = line_str +value[2] if value in start_loop else line_str + "."
+    line_str = line_str.replace("L7", "--")
+    line_str = line_str.replace("FJ", "--")
+    str_map.append(line_str)
+
+
+current_outside_dots = len(edge_dots)
+
+for value in dots_not_edges:
+    row = str_map[value[0]]
+    x = value[1]
+    lj_buffer = []
+    counter = 0
+    while x > 0:
         x -= 1
-    if crosses % 2 == 0 or crosses == 0:
-        return 0
+        if row[x] == "|":
+            counter += 1
+            if len(lj_buffer) > 0:
+                counter+=1
+                lj_buffer = []
+        elif row[x] in "-.":
+            continue
+        elif row[x] in "JL":
+            if len(lj_buffer) > 0:
+                if "F7" in lj_buffer[0]:
+                    counter += 1
+                    lj_buffer = []
+                elif "JL" in lj_buffer[0]:
+                    lj_buffer = []
+                    continue
+                else:
+                    lj_buffer.append(row[x])
+            else:
+                lj_buffer.append(row[x])
+        elif row[x] in "F7":
+            if len(lj_buffer) > 0:
+                if "JL" in lj_buffer[0]:
+                    counter += 1
+                    lj_buffer = []
+                elif "F7" in lj_buffer[0]:
+                    lj_buffer = []
+                    continue
+                else:
+                    lj_buffer.append(row[x])
+    if counter % 2 != 0 or counter == 0:
+        current_outside_dots += 1
 
-    y = row -1
-    crosses = 0
-    while y >= 0:
-        pos_to_check = map_of_just_loop[y][col]
-        if pos_to_check in start_loop:
-            up_blockers = "-JLF7"
-            if pos_to_check[2] in up_blockers:
-                crosses += 1
-        y -= 1
-    if crosses % 2 == 0 or crosses == 0:
-        return 0
-    return 1
-
-total_inside_loop = 0
-for value in dots:
-    total_inside_loop += is_position_in_loop(value)
-
-print(total_inside_loop)
-#print(is_position_in_loop((6, 2)))
-
-"""
-[(0, 0, '.'), (0, 1, '.'), (0, 2, '.'), (0, 3, '.'), (0, 4, '.'), (0, 5, '.'), (0, 6, '.'), (0, 7, '.'), (0, 8, '.'), (0, 9, '.')]
-[(1, 0, '.'), (1, 1, 'S'), (1, 2, '-'), (1, 3, '-'), (1, 4, '-'), (1, 5, '-'), (1, 6, '-'), (1, 7, '-'), (1, 8, '7'), (1, 9, '.')]
-[(2, 0, '.'), (2, 1, '|'), (2, 2, 'F'), (2, 3, '-'), (2, 4, '-'), (2, 5, '-'), (2, 6, '-'), (2, 7, '7'), (2, 8, '|'), (2, 9, '.')]
-[(3, 0, '.'), (3, 1, '|'), (3, 2, '|'), (3, 3, '.'), (3, 4, '.'), (3, 5, '.'), (3, 6, '.'), (3, 7, '|'), (3, 8, '|'), (3, 9, '.')]
-[(4, 0, '.'), (4, 1, '|'), (4, 2, '|'), (4, 3, '.'), (4, 4, '.'), (4, 5, '.'), (4, 6, '.'), (4, 7, '|'), (4, 8, '|'), (4, 9, '.')]
-[(5, 0, '.'), (5, 1, '|'), (5, 2, 'L'), (5, 3, '-'), (5, 4, '7'), (5, 5, 'F'), (5, 6, '-'), (5, 7, 'J'), (5, 8, '|'), (5, 9, '.')]
-[(6, 0, '.'), (6, 1, '|'), (6, 2, '.'), (6, 3, '.'), (6, 4, '|'), (6, 5, '|'), (6, 6, '.'), (6, 7, '.'), (6, 8, '|'), (6, 9, '.')]
-[(7, 0, '.'), (7, 1, 'L'), (7, 2, '-'), (7, 3, '-'), (7, 4, 'J'), (7, 5, 'L'), (7, 6, '-'), (7, 7, '-'), (7, 8, 'J'), (7, 9, '.')]
-[(8, 0, '.'), (8, 1, '.'), (8, 2, '.'), (8, 3, '.'), (8, 4, '.'), (8, 5, '.'), (8, 6, '.'), (8, 7, '.'), (8, 8, '.'), (8, 9, '.')]
-"""
+print(len(dots) - current_outside_dots)
